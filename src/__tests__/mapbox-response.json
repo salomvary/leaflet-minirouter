@@ -1,0 +1,30 @@
+{
+  "routes": [
+    {
+      "weight_name": "routability",
+      "legs": [
+        {
+          "summary": "A3211, A300",
+          "steps": [],
+          "distance": 4381.1,
+          "duration": 1068,
+          "weight": 1068
+        }
+      ],
+      "geometry": "amkyHz{XrGwF~@wAiBcJdCsALuDPkBxDs]yJ{HmEoHcDwMsBwPg@uKHyx@q@mWPgUz@oMzTbKfNfC\\oIhDvBdCyPiBwARcA",
+      "distance": 4381.1,
+      "duration": 1068,
+      "weight": 1068
+    }
+  ],
+  "waypoints": [
+    {
+      "distance": 7.648,
+      "name": "Haymarket",
+      "location": [-0.132618, 51.509457]
+    },
+    { "distance": 8.143, "name": "", "location": [-0.090926, 51.503677] }
+  ],
+  "code": "Ok",
+  "uuid": "7cOD-ZqEepQRiwvCUzahIFTUwb-_QCuYqYJ64h1hdtO3AnQw6KeRDQ=="
+}

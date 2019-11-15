@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "outDir": "./dist",
+    "lib": ["es6", "dom"]
+  },
+  "include": ["src/**/*"]
+}
