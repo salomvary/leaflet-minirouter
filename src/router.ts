@@ -61,7 +61,10 @@ export class OSRMV1 implements Router {
   }
 
   private decodePolyline(geometry: string): L.LatLng[] {
-    return polyline.decode(geometry, polylinePrecision).map(L.latLng);
+    return (polyline.decode(geometry, polylinePrecision) as [
+      number,
+      number
+    ][]).map(L.latLng);
   }
 }
 
