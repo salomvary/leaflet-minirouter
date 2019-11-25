@@ -1,5 +1,6 @@
 import * as L from "leaflet";
 import { Router, Route, Mapbox, OSRMV1 } from "./router";
+import { findNearestWpBefore } from "./util";
 
 export interface LayerOptions extends L.LayerOptions {
   waypoints?: L.LatLngExpression[];
@@ -44,10 +45,16 @@ export default class Layer extends L.Layer {
       if (this.waypoints.length > 1) {
         [this._route] = await this.router.route(this.waypoints);
         if (this._route) {
-          this.line = L.polyline(this._route.coordinates);
-          this.line.addTo(this.map);
+          if (!this.line) {
+            this.line = L.polyline(this._route.coordinates);
+            this.line.addTo(this.map);
+            this.line.on("click", this.handlePathClick, this);
+          } else {
+            this.line.setLatLngs(this._route.coordinates);
+          }
         } else {
           this.map.removeLayer(this.line);
+          this.line.off("click", this.handlePathClick, this);
           this.line = null;
         }
       }
@@ -75,6 +82,18 @@ export default class Layer extends L.Layer {
   }
 
   private async onMarkerDragEnd() {
+    this.route();
+  }
+
+  private handlePathClick(e: L.LeafletMouseEvent) {
+    // Prevent adding a new *destination* waypoint
+    e.originalEvent.stopPropagation();
+    const afterIndex = findNearestWpBefore(
+      this.waypoints,
+      this._route.coordinates,
+      e.latlng
+    );
+    this.waypoints.splice(afterIndex + 1, 0, e.latlng);
     this.route();
   }
 

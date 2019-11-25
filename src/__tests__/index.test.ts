@@ -1,23 +1,46 @@
+import {
+  fireEvent,
+  getByAltText,
+  wait,
+  waitForElement
+} from "@testing-library/dom";
 import * as L from "leaflet";
 import Layer, { LayerOptions } from "../layer";
-import { fireEvent, getByAltText, wait } from "@testing-library/dom";
 import * as mapboxResponse from "./mapbox-response.json";
+
+let map: L.Map, layer: Layer, container: HTMLElement;
 
 beforeEach(() => {
   // Leaflet calls scrollTo internally, not implemented in jsdom
   window.scrollTo = jest.fn();
+  // Mock router API
+  window.fetch = jest.fn();
+});
+
+afterEach(() => {
+  if (layer) {
+    layer.remove();
+  }
+  if (map) {
+    map.remove();
+  }
+  if (container) {
+    container.innerHTML = "";
+    container.remove();
+  }
 });
 
 test("show an existing route", async () => {
-  // Mock router API
-  window.fetch = jest.fn();
   (<jest.Mock>window.fetch).mockResolvedValueOnce({
     json: () => Promise.resolve(mapboxResponse)
   });
 
   // Create container
   const { container, layer } = renderLayer({
-    waypoints: [[50, 0], [50.0001, 0.0001]]
+    waypoints: [
+      [50, 0],
+      [50.0001, 0.0001]
+    ]
   });
 
   // Assert markers added
@@ -43,8 +66,6 @@ test("show an existing route", async () => {
 });
 
 test("creating a new route by clicking", async () => {
-  // Mock router API
-  window.fetch = jest.fn();
   (<jest.Mock>window.fetch).mockResolvedValueOnce({
     json: () => Promise.resolve(mapboxResponse)
   });
@@ -87,8 +108,6 @@ test("creating a new route by clicking", async () => {
 });
 
 test("change route by dragging waypoints", async () => {
-  // Mock router API
-  window.fetch = jest.fn();
   (<jest.Mock>window.fetch)
     .mockResolvedValueOnce({
       json: () => Promise.resolve(mapboxResponse)
@@ -99,7 +118,10 @@ test("change route by dragging waypoints", async () => {
 
   // Create container
   const { container, layer } = renderLayer({
-    waypoints: [[50, 0], [50.0001, 0.0001]]
+    waypoints: [
+      [50, 0],
+      [50.0001, 0.0001]
+    ]
   });
 
   // Wait until the route path is rendered into an svg layer
@@ -146,8 +168,43 @@ test("change route by dragging waypoints", async () => {
   expect(layer.getCoordinates()).toMatchSnapshot();
 });
 
+test("add waypoint by clicking on the path", async () => {
+  (<jest.Mock>window.fetch)
+    .mockResolvedValueOnce({
+      json: () => Promise.resolve(mapboxResponse)
+    })
+    .mockResolvedValueOnce({
+      json: () => Promise.resolve(mapboxResponse)
+    });
+
+  // Create container
+  const { container, layer } = renderLayer({
+    waypoints: [
+      [50, 0],
+      [50.0001, 0.0001]
+    ]
+  });
+
+  const path = await waitForElement(() => container.querySelector("svg"));
+
+  fireEvent.click(path, {
+    button: 1,
+    clientX: 150,
+    clientY: 150,
+    target: path
+  });
+
+  await wait(() => {
+    expect(layer.getWaypoints()).toEqual([
+      { lat: 50, lng: 0 },
+      { lat: 50.0001, lng: 0.0001 },
+      { lat: 49.983461596534674, lng: 0.025749206542968753 }
+    ]);
+  });
+});
+
 function renderLayer(options?: LayerOptions) {
-  const container = document.createElement("div");
+  container = document.createElement("div");
   container.style.width = "1000px";
   container.style.height = "1000px";
 
@@ -155,9 +212,9 @@ function renderLayer(options?: LayerOptions) {
   document.body.appendChild(container);
 
   // Create map with router
-  const map = L.map(container).setView([50, 0], 13);
-  const layer = new Layer(options);
+  map = L.map(container).setView([50, 0], 13);
+  layer = new Layer(options);
   layer.addTo(map);
 
-  return { container, layer };
+  return { map, container, layer };
 }
