@@ -1,6 +1,107 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`creating a new route 1`] = `
+exports[`change route by dragging waypoints 1`] = `
+Array [
+  Object {
+    "lat": 51.50945,
+    "lng": -0.13262,
+  },
+  Object {
+    "lat": 51.50807,
+    "lng": -0.13138,
+  },
+  Object {
+    "lat": 51.50775,
+    "lng": -0.13094,
+  },
+  Object {
+    "lat": 51.50828,
+    "lng": -0.12916,
+  },
+  Object {
+    "lat": 51.50761,
+    "lng": -0.12874,
+  },
+  Object {
+    "lat": 51.50754,
+    "lng": -0.12783,
+  },
+  Object {
+    "lat": 51.50745,
+    "lng": -0.12729,
+  },
+  Object {
+    "lat": 51.50652,
+    "lng": -0.12239,
+  },
+  Object {
+    "lat": 51.50841,
+    "lng": -0.12081,
+  },
+  Object {
+    "lat": 51.50944,
+    "lng": -0.11929,
+  },
+  Object {
+    "lat": 51.51026,
+    "lng": -0.11693,
+  },
+  Object {
+    "lat": 51.51084,
+    "lng": -0.11409,
+  },
+  Object {
+    "lat": 51.51104,
+    "lng": -0.11206,
+  },
+  Object {
+    "lat": 51.51099,
+    "lng": -0.10281,
+  },
+  Object {
+    "lat": 51.51124,
+    "lng": -0.0989,
+  },
+  Object {
+    "lat": 51.51115,
+    "lng": -0.09534,
+  },
+  Object {
+    "lat": 51.51085,
+    "lng": -0.09302,
+  },
+  Object {
+    "lat": 51.50735,
+    "lng": -0.09496,
+  },
+  Object {
+    "lat": 51.50491,
+    "lng": -0.09564,
+  },
+  Object {
+    "lat": 51.50476,
+    "lng": -0.09396,
+  },
+  Object {
+    "lat": 51.50391,
+    "lng": -0.09456,
+  },
+  Object {
+    "lat": 51.50324,
+    "lng": -0.09171,
+  },
+  Object {
+    "lat": 51.50377,
+    "lng": -0.09127,
+  },
+  Object {
+    "lat": 51.50367,
+    "lng": -0.09093,
+  },
+]
+`;
+
+exports[`creating a new route by clicking 1`] = `
 <svg
   height="0"
   pointer-events="none"
@@ -21,4 +122,229 @@ exports[`creating a new route 1`] = `
     />
   </g>
 </svg>
+`;
+
+exports[`creating a new route by clicking 3`] = `
+Array [
+  Object {
+    "lat": 51.50945,
+    "lng": -0.13262,
+  },
+  Object {
+    "lat": 51.50807,
+    "lng": -0.13138,
+  },
+  Object {
+    "lat": 51.50775,
+    "lng": -0.13094,
+  },
+  Object {
+    "lat": 51.50828,
+    "lng": -0.12916,
+  },
+  Object {
+    "lat": 51.50761,
+    "lng": -0.12874,
+  },
+  Object {
+    "lat": 51.50754,
+    "lng": -0.12783,
+  },
+  Object {
+    "lat": 51.50745,
+    "lng": -0.12729,
+  },
+  Object {
+    "lat": 51.50652,
+    "lng": -0.12239,
+  },
+  Object {
+    "lat": 51.50841,
+    "lng": -0.12081,
+  },
+  Object {
+    "lat": 51.50944,
+    "lng": -0.11929,
+  },
+  Object {
+    "lat": 51.51026,
+    "lng": -0.11693,
+  },
+  Object {
+    "lat": 51.51084,
+    "lng": -0.11409,
+  },
+  Object {
+    "lat": 51.51104,
+    "lng": -0.11206,
+  },
+  Object {
+    "lat": 51.51099,
+    "lng": -0.10281,
+  },
+  Object {
+    "lat": 51.51124,
+    "lng": -0.0989,
+  },
+  Object {
+    "lat": 51.51115,
+    "lng": -0.09534,
+  },
+  Object {
+    "lat": 51.51085,
+    "lng": -0.09302,
+  },
+  Object {
+    "lat": 51.50735,
+    "lng": -0.09496,
+  },
+  Object {
+    "lat": 51.50491,
+    "lng": -0.09564,
+  },
+  Object {
+    "lat": 51.50476,
+    "lng": -0.09396,
+  },
+  Object {
+    "lat": 51.50391,
+    "lng": -0.09456,
+  },
+  Object {
+    "lat": 51.50324,
+    "lng": -0.09171,
+  },
+  Object {
+    "lat": 51.50377,
+    "lng": -0.09127,
+  },
+  Object {
+    "lat": 51.50367,
+    "lng": -0.09093,
+  },
+]
+`;
+
+exports[`show an existing route 1`] = `
+<svg
+  height="0"
+  pointer-events="none"
+  style="left: 0px; top: 0px;"
+  viewBox="0 0 0 0"
+  width="0"
+>
+  <g>
+    <path
+      class="leaflet-interactive"
+      d="M0 0"
+      fill="none"
+      stroke="#3388ff"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-opacity="1"
+      stroke-width="3"
+    />
+  </g>
+</svg>
+`;
+
+exports[`show an existing route 2`] = `
+Array [
+  Object {
+    "lat": 51.50945,
+    "lng": -0.13262,
+  },
+  Object {
+    "lat": 51.50807,
+    "lng": -0.13138,
+  },
+  Object {
+    "lat": 51.50775,
+    "lng": -0.13094,
+  },
+  Object {
+    "lat": 51.50828,
+    "lng": -0.12916,
+  },
+  Object {
+    "lat": 51.50761,
+    "lng": -0.12874,
+  },
+  Object {
+    "lat": 51.50754,
+    "lng": -0.12783,
+  },
+  Object {
+    "lat": 51.50745,
+    "lng": -0.12729,
+  },
+  Object {
+    "lat": 51.50652,
+    "lng": -0.12239,
+  },
+  Object {
+    "lat": 51.50841,
+    "lng": -0.12081,
+  },
+  Object {
+    "lat": 51.50944,
+    "lng": -0.11929,
+  },
+  Object {
+    "lat": 51.51026,
+    "lng": -0.11693,
+  },
+  Object {
+    "lat": 51.51084,
+    "lng": -0.11409,
+  },
+  Object {
+    "lat": 51.51104,
+    "lng": -0.11206,
+  },
+  Object {
+    "lat": 51.51099,
+    "lng": -0.10281,
+  },
+  Object {
+    "lat": 51.51124,
+    "lng": -0.0989,
+  },
+  Object {
+    "lat": 51.51115,
+    "lng": -0.09534,
+  },
+  Object {
+    "lat": 51.51085,
+    "lng": -0.09302,
+  },
+  Object {
+    "lat": 51.50735,
+    "lng": -0.09496,
+  },
+  Object {
+    "lat": 51.50491,
+    "lng": -0.09564,
+  },
+  Object {
+    "lat": 51.50476,
+    "lng": -0.09396,
+  },
+  Object {
+    "lat": 51.50391,
+    "lng": -0.09456,
+  },
+  Object {
+    "lat": 51.50324,
+    "lng": -0.09171,
+  },
+  Object {
+    "lat": 51.50377,
+    "lng": -0.09127,
+  },
+  Object {
+    "lat": 51.50367,
+    "lng": -0.09093,
+  },
+]
 `;

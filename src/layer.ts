@@ -7,7 +7,7 @@ export interface LayerOptions extends L.LayerOptions {
 }
 
 export default class Layer extends L.Layer {
-  private waypoints?: L.LatLngExpression[];
+  private waypoints?: L.LatLng[];
   private map?: L.Map;
   private markers: L.Marker[];
   private router: Router;
@@ -16,20 +16,24 @@ export default class Layer extends L.Layer {
 
   constructor(options: LayerOptions = {}) {
     super(options);
-    this.waypoints = options.waypoints ? options.waypoints.slice(0) : [];
+    this.waypoints = options.waypoints
+      ? options.waypoints.slice(0).map(L.latLng)
+      : [];
     this.router = options.router || new OSRMV1();
     this.markers = [];
-    this.updateMarkers();
+    this.route();
   }
 
   onAdd(map: L.Map) {
     this.map = map;
     this.map.on("click", this.onMapClick, this);
+    this.updateMarkers();
     return this;
   }
 
   onRemove(map: L.Map) {
     this.removeMarkers();
+    this.map.removeLayer(this.line);
     this.map.off("click", this.onMapClick, this);
     this.map = null;
     return this;
@@ -43,13 +47,21 @@ export default class Layer extends L.Layer {
           this.line = L.polyline(this._route.coordinates);
           this.line.addTo(this.map);
         } else {
-          this._map.removeLayer(this.line);
+          this.map.removeLayer(this.line);
           this.line = null;
         }
       }
     } catch (e) {
       console.error("Routing error", e);
     }
+  }
+
+  getWaypoints(): L.LatLng[] {
+    return this.waypoints;
+  }
+
+  getCoordinates(): L.LatLng[] {
+    return this._route.coordinates || [];
   }
 
   private onMapClick(e: L.LocationEvent) {
@@ -62,7 +74,7 @@ export default class Layer extends L.Layer {
     this.waypoints[i] = e.latlng;
   }
 
-  private async onMarkerDragEnd(i: number, e: L.LeafletMouseEvent) {
+  private async onMarkerDragEnd() {
     this.route();
   }
 
@@ -77,11 +89,7 @@ export default class Layer extends L.Layer {
       (e: L.LeafletMouseEvent) => this.onMarkerDrag(i, e),
       this
     );
-    marker.on(
-      "dragend",
-      (e: L.LeafletMouseEvent) => this.onMarkerDragEnd(i, e),
-      this
-    );
+    marker.on("dragend", () => this.onMarkerDragEnd(), this);
     return marker;
   }
 
