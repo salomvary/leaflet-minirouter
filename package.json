@@ -1,5 +1,5 @@
 {
-  "name": "leaflet-minirouter",
+  "name": "@salomvary/leaflet-minirouter",
   "version": "0.0.1",
   "description": "Minimalist router plugin for Leaflet",
   "main": "dist/leaflet-minirouter.js",
