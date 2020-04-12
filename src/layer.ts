@@ -46,7 +46,9 @@ export default class Layer extends L.Layer {
         [this._route] = await this.router.route(this.waypoints);
         if (this._route) {
           if (!this.line) {
-            this.line = L.polyline(this._route.coordinates);
+            this.line = L.polyline(this._route.coordinates, {
+              bubblingMouseEvents: false
+            });
             this.line.addTo(this.map);
             this.line.on("click", this.handlePathClick, this);
           } else {
@@ -87,13 +89,13 @@ export default class Layer extends L.Layer {
 
   private handlePathClick(e: L.LeafletMouseEvent) {
     // Prevent adding a new *destination* waypoint
-    e.originalEvent.stopPropagation();
     const afterIndex = findNearestWpBefore(
       this.waypoints,
       this._route.coordinates,
       e.latlng
     );
     this.waypoints.splice(afterIndex + 1, 0, e.latlng);
+    this.updateMarkers();
     this.route();
   }
 
@@ -102,7 +104,11 @@ export default class Layer extends L.Layer {
     latLng: L.LatLngExpression,
     alt: string
   ): L.Marker {
-    const marker = L.marker(latLng, { draggable: true, alt });
+    const marker = L.marker(latLng, {
+      draggable: true,
+      bubblingMouseEvents: false,
+      alt
+    });
     marker.on(
       "drag",
       (e: L.LeafletMouseEvent) => this.onMarkerDrag(i, e),
