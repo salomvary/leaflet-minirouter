@@ -4,7 +4,8 @@
     "esModuleInterop": true,
     "outDir": "./dist",
     "lib": ["es6", "dom"],
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "declaration": true
   },
   "include": ["src/**/*"]
 }

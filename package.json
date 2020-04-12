@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "Minimalist router plugin for Leaflet",
   "main": "dist/leaflet-minirouter.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "jest",
     "build": "webpack"
