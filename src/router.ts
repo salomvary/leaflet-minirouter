@@ -36,7 +36,7 @@ export class OSRMV1 implements Router {
   constructor({
     serviceUrl = "https://router.project-osrm.org/route/v1/",
     profile = "driving",
-    requestParameters = {}
+    requestParameters = {},
   } = {}) {
     this.serviceUrl = serviceUrl;
     this.profile = profile;
@@ -50,11 +50,11 @@ export class OSRMV1 implements Router {
     const url = new URL(this.profile + "/" + locations, this.serviceUrl);
     url.search = new URLSearchParams(this.requestParameters).toString();
 
-    const response: OSRMV1Response = await fetch(url.toString()).then(_ =>
+    const response: OSRMV1Response = await fetch(url.toString()).then((_) =>
       _.json()
     );
 
-    return response.routes.map(route => {
+    return response.routes.map((route) => {
       const coordinates = this.decodePolyline(route.geometry);
       return { coordinates };
     });
@@ -77,13 +77,13 @@ export class Mapbox extends OSRMV1 {
     accessToken: string,
     {
       serviceUrl = "https://api.mapbox.com/directions/v5/",
-      profile = "mapbox/driving"
+      profile = "mapbox/driving",
     }: MapboxOptions = {}
   ) {
     super({
       serviceUrl,
       profile,
-      requestParameters: { access_token: accessToken }
+      requestParameters: { access_token: accessToken },
     });
   }
 }

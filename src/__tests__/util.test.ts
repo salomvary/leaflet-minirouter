@@ -5,7 +5,7 @@ describe.only("findNearestWpBefore", () => {
   const waypoints = (<[number, number][]>[
     [100, 200],
     [110, 210],
-    [120, 220]
+    [120, 220],
   ]).map(L.latLng);
 
   const coordinates = (<[number, number][]>[
@@ -14,7 +14,7 @@ describe.only("findNearestWpBefore", () => {
     [111, 211],
     [112, 212],
     [118, 218],
-    [119, 219]
+    [119, 219],
   ]).map(L.latLng);
 
   test("before first", () => {

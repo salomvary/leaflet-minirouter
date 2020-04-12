@@ -47,7 +47,7 @@ export default class Layer extends L.Layer {
         if (this._route) {
           if (!this.line) {
             this.line = L.polyline(this._route.coordinates, {
-              bubblingMouseEvents: false
+              bubblingMouseEvents: false,
             });
             this.line.addTo(this.map);
             this.line.on("click", this.handlePathClick, this);
@@ -107,7 +107,7 @@ export default class Layer extends L.Layer {
     const marker = L.marker(latLng, {
       draggable: true,
       bubblingMouseEvents: false,
-      alt
+      alt,
     });
     marker.on(
       "drag",
@@ -131,7 +131,7 @@ export default class Layer extends L.Layer {
   }
 
   private removeMarkers() {
-    this.markers.forEach(marker => this.map.removeLayer(marker));
+    this.markers.forEach((marker) => this.map.removeLayer(marker));
   }
 }
 

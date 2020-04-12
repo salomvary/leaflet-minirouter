@@ -11,11 +11,11 @@ import { OSRMV1, Mapbox, OSRMV1Options, MapboxOptions } from "./router";
   },
   mapbox(accessToken: string, options: MapboxOptions) {
     return new Mapbox(accessToken, options);
-  }
+  },
 };
 
 (<any>L).MiniRouter = {
   Layer: Layer,
   MapBox: Mapbox,
-  OSRMV1: OSRMV1
+  OSRMV1: OSRMV1,
 };

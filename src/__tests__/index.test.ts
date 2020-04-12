@@ -1,9 +1,4 @@
-import {
-  fireEvent,
-  getByAltText,
-  wait,
-  waitForElement
-} from "@testing-library/dom";
+import { fireEvent, getByAltText, waitFor } from "@testing-library/dom";
 import * as L from "leaflet";
 import Layer, { LayerOptions } from "../layer";
 import polyline from "@mapbox/polyline";
@@ -38,19 +33,19 @@ test("show an existing route", async () => {
           {
             geometry: polyline.encode([
               [101, 201],
-              [301, 401]
-            ])
-          }
-        ]
-      })
+              [301, 401],
+            ]),
+          },
+        ],
+      }),
   });
 
   // Create container
   const { container, layer } = renderLayer({
     waypoints: [
       [100, 200],
-      [300, 400]
-    ]
+      [300, 400],
+    ],
   });
 
   // Assert markers added
@@ -58,7 +53,7 @@ test("show an existing route", async () => {
   expect(getByAltText(container, "Route end")).toBeTruthy();
 
   // Wait until the route path is rendered into an svg layer
-  await wait(() => {
+  await waitFor(() => {
     expect(container.querySelector("svg")).toBeTruthy();
   });
 
@@ -70,17 +65,17 @@ test("show an existing route", async () => {
   // Verify getters
   expect(layer.getWaypoints()).toEqual([
     { lat: 100, lng: 200 },
-    { lat: 300, lng: 400 }
+    { lat: 300, lng: 400 },
   ]);
   expect(layer.getCoordinates()).toEqual([
     {
       lat: 101,
-      lng: 201
+      lng: 201,
     },
     {
       lat: 301,
-      lng: 401
-    }
+      lng: 401,
+    },
   ]);
 });
 
@@ -92,11 +87,11 @@ test("creating a new route by clicking", async () => {
           {
             geometry: polyline.encode([
               [101, 201],
-              [301, 401]
-            ])
-          }
-        ]
-      })
+              [301, 401],
+            ]),
+          },
+        ],
+      }),
   });
 
   // Create container
@@ -111,7 +106,7 @@ test("creating a new route by clicking", async () => {
   expect(getByAltText(container, "Route end")).toBeTruthy();
 
   // Wait until the route path is rendered into an svg layer
-  await wait(() => {
+  await waitFor(() => {
     expect(container.querySelector("svg")).toBeTruthy();
   });
 
@@ -121,7 +116,7 @@ test("creating a new route by clicking", async () => {
   // Verify getters
   expect(layer.getWaypoints()).toEqual([
     { lat: 900, lng: 100 },
-    { lat: 800, lng: 200 }
+    { lat: 800, lng: 200 },
   ]);
   expect(layer.getCoordinates()).toMatchSnapshot();
 });
@@ -136,11 +131,11 @@ test.skip("change route by dragging waypoints", async () => {
             {
               geometry: polyline.encode([
                 [101, 201],
-                [301, 401]
-              ])
-            }
-          ]
-        })
+                [301, 401],
+              ]),
+            },
+          ],
+        }),
     })
     // Update route after dragging a waypoint
     .mockResolvedValueOnce({
@@ -150,23 +145,23 @@ test.skip("change route by dragging waypoints", async () => {
             {
               geometry: polyline.encode([
                 [101, 201],
-                [301, 401]
-              ])
-            }
-          ]
-        })
+                [301, 401],
+              ]),
+            },
+          ],
+        }),
     });
 
   // Create container
   const { container, layer } = renderLayer({
     waypoints: [
       [100, 200],
-      [300, 400]
-    ]
+      [300, 400],
+    ],
   });
 
   // Wait until the route path is rendered into an svg layer
-  await wait(() => {
+  await waitFor(() => {
     expect(container.querySelector("svg")).toBeTruthy();
   });
 
@@ -175,7 +170,7 @@ test.skip("change route by dragging waypoints", async () => {
   const waypointMarker = getByAltText(container, "Route end");
 
   // Leaflet uses requestAnimationFrame when dealing with drag&drop,
-  // using timeouts and wait() for simulating asynchronicity
+  // using timeouts and waitFor() for simulating asynchronicity
   setTimeout(() => {
     fireEvent.mouseDown(waypointMarker, {
       target: waypointMarker,
@@ -183,7 +178,7 @@ test.skip("change route by dragging waypoints", async () => {
       // lat
       clientY: 900,
       // lon
-      clientX: 400
+      clientX: 400,
     });
   }, 0);
   setTimeout(() => {
@@ -193,7 +188,7 @@ test.skip("change route by dragging waypoints", async () => {
       // lat
       clientY: 800,
       // lon
-      clientX: 600
+      clientX: 600,
     });
   }, 100);
   setTimeout(() => {
@@ -203,16 +198,16 @@ test.skip("change route by dragging waypoints", async () => {
       // lat
       clientY: 800,
       // lon
-      clientX: 600
+      clientX: 600,
     });
   }, 200);
 
-  await wait(() => {
+  await waitFor(() => {
     expect(layer.getWaypoints()).toEqual([
       { lat: 100, lng: 200 },
       // This waypoint was moved 100 N, 200 E
       // from {lat: 300, lon: 400}
-      { lat: 400, lng: 600 }
+      { lat: 400, lng: 600 },
     ]);
   });
 
@@ -230,11 +225,11 @@ test("add waypoint by clicking on the path", async () => {
               geometry: polyline.encode([
                 [101, 201],
                 [201, 301],
-                [301, 401]
-              ])
-            }
-          ]
-        })
+                [301, 401],
+              ]),
+            },
+          ],
+        }),
     })
     // Update route after adding a waypoint by clicking
     .mockResolvedValueOnce({
@@ -245,22 +240,23 @@ test("add waypoint by clicking on the path", async () => {
               geometry: polyline.encode([
                 [101, 201],
                 [201, 301],
-                [301, 401]
-              ])
-            }
-          ]
-        })
+                [301, 401],
+              ]),
+            },
+          ],
+        }),
     });
 
   // Create container
   const { container, layer } = renderLayer({
     waypoints: [
       [100, 200],
-      [300, 400]
-    ]
+      [300, 400],
+    ],
   });
 
-  const pathSvg = await waitForElement(() => container.querySelector("svg"));
+  await waitFor(() => container.querySelector("svg").nodeName);
+  const pathSvg = container.querySelector("svg");
   const lineElement = pathSvg.querySelector("path");
 
   fireEvent.click(lineElement, {
@@ -269,15 +265,15 @@ test("add waypoint by clicking on the path", async () => {
     // lat: 200
     clientY: 800,
     // lon: 300
-    clientX: 300
+    clientX: 300,
   });
 
-  await wait(() => {
+  await waitFor(() => {
     expect(layer.getWaypoints()).toEqual([
       { lat: 100, lng: 200 },
       // This is the newly added waypoint
       { lat: 200, lng: 300 },
-      { lat: 300, lng: 400 }
+      { lat: 300, lng: 400 },
     ]);
   });
 });
@@ -286,15 +282,15 @@ function renderLayer(options?: LayerOptions) {
   container = document.createElement("div");
 
   Object.defineProperty(container, "clientWidth", {
-    get: function() {
+    get: function () {
       return 1000;
-    }
+    },
   });
 
   Object.defineProperty(container, "clientHeight", {
-    get: function() {
+    get: function () {
       return 1000;
-    }
+    },
   });
 
   // Leaflet assumes container to be in the document
@@ -302,7 +298,7 @@ function renderLayer(options?: LayerOptions) {
 
   // Create map with router
   map = L.map(container, {
-    crs: L.CRS.Simple
+    crs: L.CRS.Simple,
   }).setView([500, 500], 0);
   layer = new Layer(options);
   layer.addTo(map);
