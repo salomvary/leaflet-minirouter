@@ -39,16 +39,16 @@ const polylinePrecision = 5;
 export class OSRMV1 implements Router {
   private serviceUrl: string;
   private profile: string;
-  private requestParameters: { [key: string]: string };
+  private urlParameters: { [key: string]: string };
 
   constructor({
     serviceUrl = "https://router.project-osrm.org/route/v1/",
     profile = "driving",
-    requestParameters = {},
+    urlParameters = {},
   } = {}) {
     this.serviceUrl = serviceUrl;
     this.profile = profile;
-    this.requestParameters = requestParameters;
+    this.urlParameters = urlParameters;
   }
 
   async route(waypoints: L.LatLng[]): Promise<Route[]> {
@@ -56,7 +56,7 @@ export class OSRMV1 implements Router {
       .map(({ lng, lat }) => lng + "," + lat)
       .join(";");
     const url = new URL(this.profile + "/" + locations, this.serviceUrl);
-    url.search = new URLSearchParams(this.requestParameters).toString();
+    url.search = new URLSearchParams(this.urlParameters).toString();
 
     const response: OSRMV1Response = await fetch(url.toString()).then((_) =>
       _.json()
@@ -75,7 +75,7 @@ export class OSRMV1 implements Router {
 
 export interface GraphHopperOptions {
   serviceUrl?: string;
-  requestParameters?: { [key: string]: string };
+  urlParameters?: { [key: string]: string };
 }
 
 interface GraphHopperResponse {
@@ -95,23 +95,23 @@ interface GraphHopperResponse {
 export class GraphHopper implements Router {
   private apiKey: string;
   private serviceUrl: string;
-  requestParameters: { [key: string]: string };
+  urlParameters: { [key: string]: string };
 
   constructor(
     apiKey: string,
     {
       serviceUrl = "https://graphhopper.com/api/1/route",
-      requestParameters = {},
+      urlParameters = {},
     }: GraphHopperOptions = {}
   ) {
     this.apiKey = apiKey;
     this.serviceUrl = serviceUrl;
-    this.requestParameters = requestParameters;
+    this.urlParameters = urlParameters;
   }
 
   async route(waypoints: L.LatLng[]): Promise<Route[]> {
     const params = new URLSearchParams({
-      ...this.requestParameters,
+      ...this.urlParameters,
       key: this.apiKey,
     });
     waypoints.forEach(({ lng, lat }) =>
@@ -152,7 +152,7 @@ export class Mapbox extends OSRMV1 {
     super({
       serviceUrl,
       profile,
-      requestParameters: { access_token: accessToken },
+      urlParameters: { access_token: accessToken },
     });
   }
 }

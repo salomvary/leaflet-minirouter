@@ -17,7 +17,7 @@ export default class Layer extends L.Layer {
   private markers: L.Marker[];
   private _route?: Route;
   private line: L.Polyline;
-  
+
   router: Router;
 
   constructor(options: LayerOptions = {}) {
