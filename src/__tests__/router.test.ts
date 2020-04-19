@@ -18,6 +18,10 @@ test("Mapbox", async () => {
     "https://api.mapbox.com/directions/v5/mapbox/driving/0.2,0.1;-0.4,-0.3?access_token=test-token"
   );
   expect(route.coordinates).toMatchSnapshot();
+  expect(route.summary).toEqual({
+    totalDistance: 4381.1,
+    totalTime: 1068,
+  });
 });
 
 test("GraphHopper", async () => {
@@ -35,4 +39,8 @@ test("GraphHopper", async () => {
     "https://graphhopper.com/api/1/route?key=test-token&point=0.1%2C0.2&point=-0.3%2C-0.4"
   );
   expect(route.coordinates).toMatchSnapshot();
+  expect(route.summary).toEqual({
+    totalDistance: 2138.3027624572337,
+    totalTime: 129.29,
+  });
 });

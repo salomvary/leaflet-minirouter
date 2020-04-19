@@ -2,10 +2,10 @@ import * as L from "leaflet";
 import polyline from "@mapbox/polyline";
 
 export interface RouteSummary {
-  totalTime: number;
-  totalDistance: number;
-  totalAscend: number;
-  totalDescend: number;
+  totalTime?: number;
+  totalDistance?: number;
+  totalAscend?: number;
+  totalDescend?: number;
 }
 
 export interface Route {
@@ -23,8 +23,8 @@ export interface OSRMV1Options {
 
 interface OSRMV1Response {
   routes: {
-    distance: any;
-    duration: any;
+    distance?: number;
+    duration?: number;
     geometry: string;
     legs: {
       steps: {
@@ -64,7 +64,10 @@ export class OSRMV1 implements Router {
 
     return response.routes.map((route) => {
       const coordinates = decodePolyline(route.geometry);
-      const summary = <RouteSummary>{}; // FIXME
+      const summary = {
+        totalDistance: route.distance,
+        totalTime: route.duration,
+      };
       return { coordinates, summary };
     });
   }
@@ -78,6 +81,10 @@ export interface GraphHopperOptions {
 interface GraphHopperResponse {
   paths: Array<{
     points: string;
+    time?: number;
+    distance?: number;
+    ascend?: number;
+    descend?: number;
   }>;
 }
 
@@ -119,7 +126,12 @@ export class GraphHopper implements Router {
 
     return response.paths.map((path) => {
       const coordinates = decodePolyline(path.points);
-      const summary = <RouteSummary>{}; // FIXME
+      const summary = {
+        totalDistance: path.distance,
+        totalTime: path.time / 1000,
+        totalAscend: path.ascend,
+        totalDescend: path.descend,
+      };
       return { coordinates, summary };
     });
   }
