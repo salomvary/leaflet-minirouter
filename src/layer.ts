@@ -47,19 +47,22 @@ export default class Layer extends L.Layer {
 
   async route() {
     try {
-      if (this.waypoints.length > 1) {
-        [this._route] = await this.router.route(this.waypoints);
-        if (this._route) {
-          if (!this.line) {
-            this.line = L.polyline(this._route.coordinates, {
-              bubblingMouseEvents: false,
-            });
-            this.line.addTo(this.map);
-            this.line.on("click", this.handlePathClick, this);
-          } else {
-            this.line.setLatLngs(this._route.coordinates);
-          }
+      [this._route] =
+        this.waypoints.length > 1
+          ? await this.router.route(this.waypoints)
+          : [];
+      if (this._route) {
+        if (!this.line) {
+          this.line = L.polyline(this._route.coordinates, {
+            bubblingMouseEvents: false,
+          });
+          this.line.addTo(this.map);
+          this.line.on("click", this.handlePathClick, this);
         } else {
+          this.line.setLatLngs(this._route.coordinates);
+        }
+      } else {
+        if (this.line) {
           this.map.removeLayer(this.line);
           this.line.off("click", this.handlePathClick, this);
           this.line = null;
@@ -75,7 +78,8 @@ export default class Layer extends L.Layer {
   }
 
   setWaypoints(waypoints: L.LatLngExpression[]): void {
-    // FIXME
+    this.waypoints = waypoints.map(L.latLng);
+    this.route();
   }
 
   getCoordinates(): L.LatLng[] {
@@ -84,14 +88,14 @@ export default class Layer extends L.Layer {
 
   private onMapClick(e: L.LocationEvent) {
     this.waypoints.push(e.latlng);
-    this.fire('waypointschanged', this.waypoints);
+    this.fire("waypointschanged", this.waypoints);
     this.updateMarkers();
     this.route();
   }
 
   private onMarkerDrag(i: number, e: L.LeafletMouseEvent) {
     this.waypoints[i] = e.latlng;
-    this.fire('waypointschanged',  {waypoints: this.waypoints});
+    this.fire("waypointschanged", { waypoints: this.waypoints });
   }
 
   private async onMarkerDragEnd() {
@@ -106,7 +110,7 @@ export default class Layer extends L.Layer {
       e.latlng
     );
     this.waypoints.splice(afterIndex + 1, 0, e.latlng);
-    this.fire('waypointschanged', {waypoints: this.waypoints});
+    this.fire("waypointschanged", { waypoints: this.waypoints });
     this.updateMarkers();
     this.route();
   }
