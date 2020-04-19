@@ -1,7 +1,15 @@
 import * as L from "leaflet";
 import polyline from "@mapbox/polyline";
 
+export interface RouteSummary {
+  totalTime: number;
+  totalDistance: number;
+  totalAscend: number;
+  totalDescend: number;
+}
+
 export interface Route {
+  summary?: RouteSummary;
   coordinates: L.LatLng[];
 }
 
@@ -55,16 +63,65 @@ export class OSRMV1 implements Router {
     );
 
     return response.routes.map((route) => {
-      const coordinates = this.decodePolyline(route.geometry);
-      return { coordinates };
+      const coordinates = decodePolyline(route.geometry);
+      const summary = <RouteSummary>{}; // FIXME
+      return { coordinates, summary };
     });
   }
+}
 
-  private decodePolyline(geometry: string): L.LatLng[] {
-    return (polyline.decode(geometry, polylinePrecision) as [
-      number,
-      number
-    ][]).map(L.latLng);
+export interface GraphHopperOptions {
+  serviceUrl?: string;
+  requestParameters?: { [key: string]: string };
+}
+
+interface GraphHopperResponse {
+  paths: Array<{
+    points: string;
+  }>;
+}
+
+/**
+ * Router using GraphHopper API:
+ * https://docs.graphhopper.com/#operation/getRoute
+ */
+export class GraphHopper implements Router {
+  private apiKey: string;
+  private serviceUrl: string;
+  requestParameters: { [key: string]: string };
+
+  constructor(
+    apiKey: string,
+    {
+      serviceUrl = "https://graphhopper.com/api/1/route",
+      requestParameters = {},
+    }: GraphHopperOptions = {}
+  ) {
+    this.apiKey = apiKey;
+    this.serviceUrl = serviceUrl;
+    this.requestParameters = requestParameters;
+  }
+
+  async route(waypoints: L.LatLng[]): Promise<Route[]> {
+    const params = new URLSearchParams({
+      ...this.requestParameters,
+      key: this.apiKey,
+    });
+    waypoints.forEach(({ lng, lat }) =>
+      params.append("point", lat + "," + lng)
+    );
+    const url = new URL(this.serviceUrl);
+    url.search = params.toString();
+
+    const response: GraphHopperResponse = await fetch(
+      url.toString()
+    ).then((_) => _.json());
+
+    return response.paths.map((path) => {
+      const coordinates = decodePolyline(path.points);
+      const summary = <RouteSummary>{}; // FIXME
+      return { coordinates, summary };
+    });
   }
 }
 
@@ -86,4 +143,11 @@ export class Mapbox extends OSRMV1 {
       requestParameters: { access_token: accessToken },
     });
   }
+}
+
+function decodePolyline(geometry: string): L.LatLng[] {
+  return (polyline.decode(geometry, polylinePrecision) as [
+    number,
+    number
+  ][]).map(L.latLng);
 }

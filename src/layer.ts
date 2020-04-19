@@ -7,13 +7,18 @@ export interface LayerOptions extends L.LayerOptions {
   router?: Router;
 }
 
+export interface RouteSelectedEvent extends L.LayerEvent {
+  route: Route;
+}
+
 export default class Layer extends L.Layer {
   private waypoints?: L.LatLng[];
   private map?: L.Map;
   private markers: L.Marker[];
-  private router: Router;
   private _route?: Route;
   private line: L.Polyline;
+  
+  router: Router;
 
   constructor(options: LayerOptions = {}) {
     super(options);
@@ -69,18 +74,24 @@ export default class Layer extends L.Layer {
     return this.waypoints;
   }
 
+  setWaypoints(waypoints: L.LatLngExpression[]): void {
+    // FIXME
+  }
+
   getCoordinates(): L.LatLng[] {
     return this._route.coordinates || [];
   }
 
   private onMapClick(e: L.LocationEvent) {
     this.waypoints.push(e.latlng);
+    this.fire('waypointschanged', this.waypoints);
     this.updateMarkers();
     this.route();
   }
 
   private onMarkerDrag(i: number, e: L.LeafletMouseEvent) {
     this.waypoints[i] = e.latlng;
+    this.fire('waypointschanged',  {waypoints: this.waypoints});
   }
 
   private async onMarkerDragEnd() {
@@ -95,6 +106,7 @@ export default class Layer extends L.Layer {
       e.latlng
     );
     this.waypoints.splice(afterIndex + 1, 0, e.latlng);
+    this.fire('waypointschanged', {waypoints: this.waypoints});
     this.updateMarkers();
     this.route();
   }

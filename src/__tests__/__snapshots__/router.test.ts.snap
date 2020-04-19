@@ -1,5 +1,78 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`GraphHopper 1`] = `
+Array [
+  Object {
+    "lat": 52.47384,
+    "lng": 13.36285,
+  },
+  Object {
+    "lat": 52.47361,
+    "lng": 13.36361,
+  },
+  Object {
+    "lat": 52.47262,
+    "lng": 13.36584,
+  },
+  Object {
+    "lat": 52.47146,
+    "lng": 13.36834,
+  },
+  Object {
+    "lat": 52.47115,
+    "lng": 13.3693,
+  },
+  Object {
+    "lat": 52.47093,
+    "lng": 13.37029,
+  },
+  Object {
+    "lat": 52.4705,
+    "lng": 13.37254,
+  },
+  Object {
+    "lat": 52.47029,
+    "lng": 13.37392,
+  },
+  Object {
+    "lat": 52.47017,
+    "lng": 13.37483,
+  },
+  Object {
+    "lat": 52.47009,
+    "lng": 13.37565,
+  },
+  Object {
+    "lat": 52.46991,
+    "lng": 13.37851,
+  },
+  Object {
+    "lat": 52.46987,
+    "lng": 13.37992,
+  },
+  Object {
+    "lat": 52.46952,
+    "lng": 13.38477,
+  },
+  Object {
+    "lat": 52.46948,
+    "lng": 13.38549,
+  },
+  Object {
+    "lat": 52.46948,
+    "lng": 13.38574,
+  },
+  Object {
+    "lat": 52.47358,
+    "lng": 13.38583,
+  },
+  Object {
+    "lat": 52.47374,
+    "lng": 13.38583,
+  },
+]
+`;
+
 exports[`Mapbox 1`] = `
 Array [
   Object {
