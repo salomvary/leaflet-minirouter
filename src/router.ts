@@ -37,9 +37,9 @@ interface OSRMV1Response {
 const polylinePrecision = 5;
 
 export class OSRMV1 implements Router {
-  private serviceUrl: string;
-  private profile: string;
-  private urlParameters: { [key: string]: string };
+  serviceUrl: string;
+  profile: string;
+  urlParameters: { [key: string]: string };
 
   constructor({
     serviceUrl = "https://router.project-osrm.org/route/v1/",
@@ -93,8 +93,8 @@ interface GraphHopperResponse {
  * https://docs.graphhopper.com/#operation/getRoute
  */
 export class GraphHopper implements Router {
-  private apiKey: string;
-  private serviceUrl: string;
+  apiKey: string;
+  serviceUrl: string;
   urlParameters: { [key: string]: string };
 
   constructor(
