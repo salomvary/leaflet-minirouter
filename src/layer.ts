@@ -61,6 +61,7 @@ export default class Layer extends L.Layer {
         } else {
           this.line.setLatLngs(this._route.coordinates);
         }
+        this.fire("routeselected", { route: this._route });
       } else {
         if (this.line) {
           this.map.removeLayer(this.line);
@@ -79,6 +80,8 @@ export default class Layer extends L.Layer {
 
   setWaypoints(waypoints: L.LatLngExpression[]): void {
     this.waypoints = waypoints.map(L.latLng);
+    this.fire("waypointschanged", { waypoints: this.waypoints });
+    this.updateMarkers();
     this.route();
   }
 
