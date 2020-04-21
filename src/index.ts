@@ -1,4 +1,4 @@
-import L from "leaflet";
+import * as L from "leaflet";
 import Layer, { LayerOptions } from "./layer";
 import {
   Mapbox,

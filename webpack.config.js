@@ -3,6 +3,7 @@ const path = require("path");
 module.exports = {
   mode: "production",
   entry: "./src/index.ts",
+  devtool: "source-map",
   module: {
     rules: [
       {
@@ -16,6 +17,7 @@ module.exports = {
     extensions: [".tsx", ".ts", ".js"],
   },
   output: {
+    libraryTarget: "umd",
     filename: "leaflet-minirouter.js",
     path: path.resolve(__dirname, "dist"),
   },
