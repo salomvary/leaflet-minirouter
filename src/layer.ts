@@ -135,18 +135,22 @@ export default class Layer extends L.Layer {
     latLng: L.LatLngExpression,
     alt: string
   ): L.Marker {
-    const marker = this.options.createMarker(latLng, {
-      draggable: true,
-      bubblingMouseEvents: false,
-      alt,
-    }, i);
-    marker.on(
-      "drag",
-      (e: L.LeafletMouseEvent) => this.onMarkerDrag(i, e),
-      this
-    );
-    marker.on("dragend", () => this.onMarkerDragEnd(), this);
-    return marker;
+    return this.options
+      .createMarker(
+        latLng,
+        {
+          draggable: true,
+          alt,
+        },
+        i
+      )
+      .on("drag", (e: L.LeafletMouseEvent) => this.onMarkerDrag(i, e), this)
+      .on("dragend", () => this.onMarkerDragEnd(), this)
+      .on("click", function (e: L.LeafletMouseEvent) {
+        // Prevent adding a route point when a marker is clicked
+        // (Should not be necessary, but it is: https://leafletjs.com/reference-1.6.0.html#marker-bubblingmouseevents)
+        e.originalEvent.stopPropagation();
+      });
   }
 
   private updateMarkers() {
