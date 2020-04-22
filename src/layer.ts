@@ -5,6 +5,12 @@ import { findNearestWpBefore } from "./util";
 export interface LayerOptions extends L.LayerOptions {
   waypoints?: L.LatLngExpression[];
   router?: Router;
+  /** Factory function to create custom markers */
+  createMarker?: (
+    latlng: L.LatLngExpression,
+    options: L.MarkerOptions,
+    index: number
+  ) => L.Marker;
 }
 
 export interface RouteSelectedEvent extends L.LayerEvent {
@@ -12,6 +18,10 @@ export interface RouteSelectedEvent extends L.LayerEvent {
 }
 
 export default class Layer extends L.Layer {
+  options: LayerOptions = {
+    createMarker: L.marker,
+  };
+
   private waypoints?: L.LatLng[];
   private map?: L.Map;
   private markers: L.Marker[];
@@ -22,6 +32,8 @@ export default class Layer extends L.Layer {
 
   constructor(options: LayerOptions = {}) {
     super(options);
+    L.Util.setOptions(this, options);
+
     this.waypoints = options.waypoints
       ? options.waypoints.slice(0).map(L.latLng)
       : [];
@@ -123,11 +135,11 @@ export default class Layer extends L.Layer {
     latLng: L.LatLngExpression,
     alt: string
   ): L.Marker {
-    const marker = L.marker(latLng, {
+    const marker = this.options.createMarker(latLng, {
       draggable: true,
       bubblingMouseEvents: false,
       alt,
-    });
+    }, i);
     marker.on(
       "drag",
       (e: L.LeafletMouseEvent) => this.onMarkerDrag(i, e),
