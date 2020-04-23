@@ -146,6 +146,11 @@ export default class Layer extends L.Layer {
       )
       .on("drag", (e: L.LeafletMouseEvent) => this.onMarkerDrag(i, e), this)
       .on("dragend", () => this.onMarkerDragEnd(), this)
+      .on(
+        "contextmenu",
+        (e: L.LocationEvent) => this.onMarkerContextMenu(i, e),
+        this
+      )
       .on("click", function (e: L.LeafletMouseEvent) {
         // Prevent adding a route point when a marker is clicked
         // (Should not be necessary, but it is: https://leafletjs.com/reference-1.6.0.html#marker-bubblingmouseevents)
@@ -167,6 +172,36 @@ export default class Layer extends L.Layer {
 
   private removeMarkers() {
     this.markers.forEach((marker) => this.map.removeLayer(marker));
+  }
+
+  private onMarkerContextMenu(i: number, event: L.LocationEvent) {
+    const deleteButton = L.DomUtil.create(
+      "button",
+      "leaflet-minirouter-delete-button"
+    );
+    L.DomEvent.on(
+      deleteButton,
+      "click",
+      this.onDeleteWaypointClick.bind(this, i)
+    );
+    deleteButton.innerHTML = "Delete Waypoint";
+
+    L.popup({ offset: [0, -2] })
+      .setLatLng(event.latlng)
+      .setContent(deleteButton)
+      .openOn(this.map);
+  }
+
+  private onDeleteWaypointClick(i: number) {
+    this.map.closePopup();
+    this.removeWaypoint(i);
+  }
+
+  private removeWaypoint(i: number) {
+    this.waypoints.splice(i, 1);
+    this.fire("waypointschanged", this.waypoints);
+    this.updateMarkers();
+    this.route();
   }
 }
 
